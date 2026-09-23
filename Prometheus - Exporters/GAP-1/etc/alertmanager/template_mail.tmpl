@@ -1,0 +1,54 @@
+{{ define "email.custom.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; color: #333333; background-color: #f9f9f9; padding: 20px; }
+        .container { max-width: 650px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .header { font-size: 18px; font-weight: bold; padding-bottom: 15px; margin-bottom: 20px; border-bottom: 2px solid; }
+        .firing { color: #d9534f; border-color: #d9534f; }
+        .resolved { color: #5cb85c; border-color: #5cb85c; }
+        .alert-item { margin-bottom: 15px; padding: 10px; background: #fdfdfd; border-left: 4px solid; border-radius: 4px; }
+        .alert-firing-item { border-left-color: #d9534f; }
+        .alert-resolved-item { border-left-color: #5cb85c; }
+        .meta { font-size: 12px; color: #777777; margin-top: 5px; }
+        .label { font-weight: bold; color: #555555; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    {{ if gt (len .Alerts.Firing) 0 }}
+    <div class="header firing">🔥 ОБНАРУЖЕНЫ АЛЕРТЫ (Активно: {{ .Alerts.Firing | len }})</div>
+    {{ range .Alerts.Firing }}
+    <div class="alert-item alert-firing-item">
+        <div style="font-weight: bold; font-size: 15px;">{{ .Annotations.summary }}</div>
+        <div style="margin-top: 5px;">{{ .Annotations.description }}</div>
+        <div class="meta">
+            <span class="label">Узел:</span> <code>{{ .Labels.instance }}</code> | 
+            <span class="label">Важность:</span> <code>{{ .Labels.severity }}</code> | 
+            <span class="label">Старт:</span> {{ .StartsAt.Format "15:04:05 02-01-2006" }}
+        </div>
+    </div>
+    {{ end }}
+    {{ end }}
+
+    {{ if gt (len .Alerts.Resolved) 0 }}
+    {{ if gt (len .Alerts.Firing) 0 }}<hr style="border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;">{{ end }}
+    <div class="header resolved">✅ ВОССТАНОВЛЕНО (Всего: {{ .Alerts.Resolved | len }})</div>
+    {{ range .Alerts.Resolved }}
+    <div class="alert-item alert-resolved-item">
+        <div style="font-weight: bold; font-size: 15px; color: #444;">{{ .Annotations.summary }}</div>
+        <div class="meta">
+            <span class="label">Узел:</span> <code>{{ .Labels.instance }}</code> | 
+            <span class="label">Решено в:</span> {{ .EndsAt.Format "15:04:05 02-01-2006" }}
+        </div>
+    </div>
+    {{ end }}
+    {{ end }}
+
+</div>
+</body>
+</html>
+{{ end }}
