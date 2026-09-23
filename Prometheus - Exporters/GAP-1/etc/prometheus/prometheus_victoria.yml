@@ -1,0 +1,108 @@
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+  external_labels:
+    env: 'prod'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+remote_write:
+  - url: "http://127.0.0.1:8428/api/v1/write"
+    # Опционально: можно настроить параметры очереди для стабильности
+    queue_config:
+      max_samples_per_send: 10000
+      capacity: 20000
+
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+    scrape_interval: 5s
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+
+    static_configs:
+      - targets: ["localhost:9090"]
+       # The label name is added as a label `label_name=<label_value>` to any timeseries scraped from this config.
+        labels:
+          app: "prometheus"
+    scrape_native_histograms: true
+
+  - job_name: 'nginx'
+    scheme: https
+    scrape_interval: 5s
+    metrics_path: /metrics/nginx
+    static_configs:
+      - targets: ['172.30.222.4:1080']
+        labels:
+          app: "nginx_exporter"
+    basic_auth:
+       username: 'prometheus'
+       password: 'P@ssword1!'
+    tls_config:
+      insecure_skip_verify: true
+
+  - job_name: 'php-fm'
+    scheme: https
+    scrape_interval: 5s
+    metrics_path: /metrics/php
+    static_configs:
+      - targets: ['172.30.222.4:1080']
+        labels:
+          app: "php-fm_exporter"
+    basic_auth:
+       username: 'prometheus'
+       password: 'P@ssword1!'
+    tls_config:
+      insecure_skip_verify: true
+
+  - job_name: 'mysqld'
+    scheme: https
+    scrape_interval: 5s
+    metrics_path: /metrics/mysql
+    static_configs:
+      - targets: ['172.30.222.4:1080']
+        labels:
+          app: "mysqld_exporter"
+    basic_auth:
+       username: 'prometheus'
+       password: 'P@ssword1!'
+    tls_config:
+      insecure_skip_verify: true
+
+  - job_name: 'wordpress_blackbox'
+    scheme: https
+    scrape_interval: 5s
+    metrics_path: /metrics/black_box
+    params:
+      module: [http_wordpress_check] # модуль из blackbox.yml
+    static_configs:
+      - targets:
+        - http://172.30.222.4:80/index.php     # Главная страница сайта
+    basic_auth:
+       username: 'prometheus'
+       password: 'P@ssword1!'
+    tls_config:
+      insecure_skip_verify: true
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.30.222.4:1080
