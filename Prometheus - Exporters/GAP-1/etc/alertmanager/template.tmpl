@@ -1,0 +1,18 @@
+{{ define "uc.custom" }}
+{{ if gt (len .Alerts.Firing) 0 -}}
+🔥 **[АВАРИЯ] Окружение: {{ (index .Alerts.Firing 0).Labels.environment }}**
+{{ range .Alerts.Firing -}}
+• **{{ .Labels.alertname }}**
+  📌 **Узел:** `{{ .Labels.instance }}`
+  📝 **Описание:** {{ .Annotations.description }}
+{{ end }}
+{{- end }}
+
+{{ if gt (len .Alerts.Resolved) 0 -}}
+✅ **[ВОССТАНОВЛЕНО] Окружение: {{ (index .Alerts.Resolved 0).Labels.environment }}**
+{{ range .Alerts.Resolved -}}
+• **{{ .Labels.alertname }}**
+  📌 **Узел:** `{{ .Labels.instance }}`
+{{ end }}
+{{- end }}
+{{ end }}
