@@ -1,0 +1,20 @@
+groups:
+  - name: infrastructure_alerts
+    rules:
+      - alert: ExporterDown
+        expr: up == 0
+        for: 1m  # Алерт сработает, если экспортер недоступен больше 1 минуты
+        labels:
+          severity: warning
+        annotations:
+          summary: "Экспортер {{$labels.job}} недоступен!"
+          description: "Экспортер {{ $labels.app }} на узле {{$labels.instance}} перестал отдавать метрики."
+      
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Приложение {{$labels.job}} недоступно!"
+          description: "Приложение {{ $labels.app }} на узле {{$labels.instance}} недоступно!"
