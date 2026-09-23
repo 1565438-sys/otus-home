@@ -1,0 +1,24 @@
+[Unit]
+Description=Prometheus PHP-FPM Exporter
+After=network.target php8.2-fpm.service
+
+[Service]
+Type=simple
+User=php_fpm_exporter
+Group=php_fpm_exporter
+# Переменная окружения задает адрес PHP-FPM и путь к статусу
+Environment="PHP_FPM_SCRAPE_URI=unix:///run/php/php8.3-fpm.sock;/status"
+# Если вы используете HTTP, раскомментируйте строку ниже и закомментируйте строку выше:
+# Environment="PHP_FPM_SCRAPE_URI=http://127.0.0"
+
+ExecStart=/usr/local/bin/php-fpm_exporter_2.2.0_linux_amd64 server listen-address=0.0.0.0:9253
+Restart=always
+RestartSec=5
+
+# Ограничение прав процесса для безопасности
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

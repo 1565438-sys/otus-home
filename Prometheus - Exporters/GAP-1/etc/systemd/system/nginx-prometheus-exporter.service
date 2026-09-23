@@ -1,0 +1,12 @@
+[Unit]
+Description=NGINX Prometheus Exporter (Snap)
+After=network.target nginx.service
+
+[Service]
+Type=simple
+ExecStart=/snap/bin/nginx-prometheus-exporter -nginx.scrape-uri=http://127.0.0.1:8080/stub_status
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
