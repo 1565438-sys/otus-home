@@ -12,7 +12,8 @@ Prometheus, black_box exporter, mysql exporter, php_fm exporter, nginx exporter.
 
 ДЗ: Хранилище метрик
 1. Загружен бинарный файл Victoria_metric и сделан systemd service
-2. Добавлена конфигурация для Victoria metric в Prometheus. Prometheus - Exporters/GAP-1/etc/prometheus/prometheus_victoria.yml
+2. Добавлена конфигурация для Victoria metric в Prometheus. 
+      Prometheus - Exporters/GAP-1/etc/prometheus/prometheus_victoria.yml
 3. Добавлен глобальный лейбл site: prod, с которым Prometheus отправляет метрики в victoria metrics
 4. В Victoria metrics установлено время храниния метрик в 2 недели. В Prometheus уменьшено время хранения метрик до 2 часов.
 
@@ -25,4 +26,5 @@ Prometheus, black_box exporter, mysql exporter, php_fm exporter, nginx exporter.
       Prometheus - Exporters/GAP-1/etc/prometheus/prometheus_alert.yml
       Prometheus - Exporters/GAP-1/etc/prometheus/alert.rules.yml
 3. В Alert manager настроены rotes в зависимости от severity выбирается receiver: mail или внутренний мессенджер.
+      Prometheus - Exporters/GAP-1/etc/alertmanager/alertmanager.yml
 
