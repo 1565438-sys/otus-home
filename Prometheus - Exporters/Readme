@@ -20,6 +20,6 @@ Prometheus, black_box exporter, mysql exporter, php_fm exporter, nginx exporter.
 
 ДЗ: Настройка алертинга
 1. Загружен бинарный файл alert_manager и сделан systemd service Prometheus - Exporters/GAP-1/etc/systemd/system/alertmanager.service
-2. В Prometheus настроен alert.rules.yml c severity: warning и severity: critical
+2. В Prometheus настроен alert.rules.yml c severity: warning и severity: critical Prometheus - Exporters/GAP-1/etc/prometheus/prometheus_alert.yml
 3. В Alert manager настроены rotes в зависимости от severity выбирается receiver: mail или внутренний мессенджер.
 
