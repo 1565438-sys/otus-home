@@ -1,0 +1,15 @@
+[Unit]
+Description=Prometheus MySQLd Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=exporter_mysql
+Group=exporter_mysql
+Type=simple
+ExecStart=/usr/bin/mysqld_exporter --config.my-cnf=/etc/mysqld_exporter/.my.cnf
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
