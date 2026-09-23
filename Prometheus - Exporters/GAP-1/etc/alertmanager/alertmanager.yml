@@ -1,0 +1,49 @@
+global:
+  smtp_smarthost: 'smtp.protei.ru:465'
+  smtp_from: 'alert-metel@protei.ru'
+  smtp_auth_username: 'alert-metel@protei.ru'
+  smtp_auth_password: 'avhgy0FVjvGTQdLJ'
+  smtp_require_tls: false 
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 1h
+  receiver: 'web.hook'
+
+  routes:
+    # Все алерты с severity=warning уходят в web.hook
+    - matchers:
+        - severity = warning
+      receiver: 'web.hook'
+
+    # Все алерты с severity=critical уходят в mail
+    - matchers:
+        - severity = critical
+      receiver: 'mail'
+
+templates:
+  - '/etc/alertmanager/template.tmpl'
+  - '/etc/alertmanager/template_mail.tmpl'
+
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: 'https://uc.protei.ru/api/uc/v2/webhook/send/4070524703733131928'
+        send_resolved: true
+        payload: |
+          {
+            "nickname": "alert",
+            "text": "{{ template "uc.custom" . }}"
+          }
+
+  - name: 'mail'
+    email_configs:
+      - to: 'iventev@protei.ru'
+        # Можно настроить кастомную тему письма
+        headers:
+          subject: '⚠️ [Warning] {{ .CommonAnnotations.summary }}'
+        # Отправлять ли уведомление, когда проблема решена
+        html: '{{ template "email.custom.html" . }}'
+        send_resolved: true
