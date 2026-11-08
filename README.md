@@ -17,4 +17,5 @@ deb [signed-by=/usr/share/keyrings/influxdata-archive.gpg] https://repos.influxd
 5. Настройка influxdb
     Создание базы данных influxdb для сбора метрик
     influx -execute "CREATE DATABASE my_metrics"
-   
+
+6. Настройка конфигурации telegraf для отправки данных в influxdb (out.conf)
