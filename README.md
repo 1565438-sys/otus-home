@@ -37,4 +37,8 @@ deb [signed-by=/usr/share/keyrings/influxdata-archive.gpg] https://repos.influxd
         phpfpm
         processes
 
+8. Настройка chronograf. Настройка подключения к influxdb и kapacitor по портам, где слушается API
+   "kapacitord" *:9092
+   "influxd": *:8086
+<img width="840" height="557" alt="image" src="https://github.com/user-attachments/assets/1df6f37e-27cf-47d7-a75a-8fa4045c47d8" />
 
