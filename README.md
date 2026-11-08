@@ -50,5 +50,6 @@ deb [signed-by=/usr/share/keyrings/influxdata-archive.gpg] https://repos.influxd
     
     <img width="1308" height="275" alt="image" src="https://github.com/user-attachments/assets/f92c2124-ea46-4589-a4b8-de966c2eecd2" />
 
-    <img width="1266" height="527" alt="image" src="https://github.com/user-attachments/assets/20bde058-0d61-43db-bcf6-f3465d97e304" />
+    <img width="1266" height="527" alt="image" src="https://github.com/user-attachments/assets/96e5296c-eca7-4bab-be75-ea80fd898c1f" />
+
 
