@@ -19,3 +19,22 @@ deb [signed-by=/usr/share/keyrings/influxdata-archive.gpg] https://repos.influxd
     influx -execute "CREATE DATABASE my_metrics"
 
 6. Настройка конфигурации telegraf для отправки данных в influxdb (out.conf)
+
+7. Проврка, что данные собираются:
+        influx -database 'my_metrics' -execute 'SHOW MEASUREMENTS'
+        name: measurements
+        name
+        ----
+        cpu
+        cpu_load
+        disk
+        http_response
+        kernel
+        mem
+        mysql
+        net
+        nginx
+        phpfpm
+        processes
+
+
